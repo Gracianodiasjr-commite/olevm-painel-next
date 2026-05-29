@@ -1,0 +1,21 @@
+{
+  "name": "olevm-painel-producao",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Painel de Produção OléVM - Meta de Faturamento 2026.1 (Next.js + Postgres)",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "postgres": "3.4.4"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}
