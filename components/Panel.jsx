@@ -173,10 +173,8 @@ export default function Panel() {
     if (body) body.classList.toggle('collapsed');
   };
 
-  const onCfgChange = (e) => {
-    const inp = e.target.closest('[data-cfg]');
-    if (!inp) return;
-    P.setCfg(inp.dataset.cfg, inp.dataset.field, inp.value);
+  const onCfg = (id, field, value) => {
+    P.setCfg(id, field, value); // atualiza o estado e agenda gravação no Postgres
     rerender();
   };
 
@@ -443,7 +441,21 @@ export default function Panel() {
               <thead>
                 <tr><th>Etapa</th><th>Responsável</th><th>Meta (casas)</th><th>Data-meta</th><th>Teto/dia</th><th>% Atenção (amarelo)</th></tr>
               </thead>
-              <Html as="tbody" html={P.buildCfgTbody()} onChange={onCfgChange} />
+              <tbody>
+                {P.cfgRows().map((r) => (
+                  <tr key={r.id}>
+                    <td>
+                      <strong>{r.id} · {r.nome}</strong>
+                      {r.marcador && <span className="tag tag-blue" style={{ fontSize: 9, padding: '1px 5px', marginLeft: 4 }}>MARCADOR</span>}
+                    </td>
+                    <td className="txt2">{r.resp}</td>
+                    <td><input type="number" min="0" max={P.TOTAL_CASAS} value={r.meta} onChange={(e) => onCfg(r.id, 'meta', e.target.value)} style={{ width: 70 }} /></td>
+                    <td><input type="date" value={r.dataMeta} onChange={(e) => onCfg(r.id, 'dataMeta', e.target.value)} /></td>
+                    <td><input type="number" step="0.01" min="0" value={r.teto} onChange={(e) => onCfg(r.id, 'teto', e.target.value)} style={{ width: 70 }} placeholder={r.marcador ? 'sem teto' : ''} /></td>
+                    <td><input type="number" step="1" min="0" max="100" value={r.pctAtencao} onChange={(e) => onCfg(r.id, 'pctAtencao', e.target.value)} style={{ width: 70 }} placeholder={r.marcador ? '—' : '10'} disabled={r.marcador} /> %</td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </section>
